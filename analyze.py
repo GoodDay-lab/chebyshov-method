@@ -29,9 +29,9 @@ def plot_errors_with_min(iterations, errors_x, errors_b, label):
     min_x_iter = iterations[errors_x.index(min_x)]
     min_b_iter = iterations[errors_b.index(min_b)]
 
-    plt.plot(iterations, errors_x, label=f'Ошибка по x (min: {min_x})', 
+    plt.loglog(iterations, errors_x, label=f'Ошибка по x (min: {min_x})', 
              marker='o', markersize=4, color='blue')
-    plt.plot(iterations, errors_b, label=f'Ошибка по b (min: {min_b})', 
+    plt.loglog(iterations, errors_b, label=f'Ошибка по b (min: {min_b})', 
              marker='s', markersize=4, color='red')
 
     plt.scatter(min_x_iter, min_x, color='blue', s=100, zorder=5, 
