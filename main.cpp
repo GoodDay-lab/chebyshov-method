@@ -15,12 +15,14 @@
 int main(int argc, char** argv) {
     Matrix mat;
     size_t num_iter = 8;
+    std::string method_type;
 
-    if (argc < 3) {
-        throw std::runtime_error("Missed argument: path to matrix csv file");
+    if (argc < 4) {
+        throw std::runtime_error("Missed argument: {path-to-matrix} {num-iter} {method-type}");
     } else {
         std::string fileName = std::string(argv[1]);
         num_iter = std::stol(argv[2]);
+        method_type = std::string(argv[3]);
 
         mat.readFromFile(fileName);
     }
@@ -31,7 +33,13 @@ int main(int argc, char** argv) {
         mat(i, i) += 1.0;
     }
 
-    ChebyshovSolver2 solver(num_iter);
+
+    std::unique_ptr<Solver> solver;
+    if (!method_type.compare("one-step")) { 
+        solver = std::make_unique<ChebyshovSolver>(num_iter);
+    } else {
+        solver = std::make_unique<ChebyshovSolver2>(num_iter);
+    }
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -51,8 +59,8 @@ int main(int argc, char** argv) {
     // Засекаем время работы исключтельно только алгоритма
     // Вычисление множителя + Решение СЛАУ
     const auto start{std::chrono::high_resolution_clock::now()};
-    solver.fit(mat);
-    solver.solve(b_orig, x_pred);
+    solver->fit(mat);
+    solver->solve(b_orig, x_pred);
     const auto finish{std::chrono::high_resolution_clock::now()};
     const auto duration = finish - start;
 

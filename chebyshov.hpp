@@ -7,15 +7,21 @@
 #include <vector>
 
 
-class ChebyshovSolver {
+class Solver {
+public:
+    virtual ~Solver() = default;
+    virtual void fit(const Matrix &input) = 0;
+    virtual void solve(const Vector &y_true, Vector &x_pred) = 0;
+};
+
+class ChebyshovSolver : public Solver {
 public:
     ChebyshovSolver(iT num_iter = 8) : 
         _iter_cnt(num_iter),
         _min(0.0), _max(0.0), eqparams(Matrix()) {};
 
-    void fit(const Matrix &input);
-    
-    void solve(const Vector &y_true, Vector &solution);
+    void fit(const Matrix &input) override;
+    void solve(const Vector &y_true, Vector &x_pred) override;
 
 private:
     iT _iter_cnt;
@@ -25,15 +31,14 @@ private:
     Matrix eqparams;
 };
 
-class ChebyshovSolver2 {
+class ChebyshovSolver2 : public Solver {
 public:
     ChebyshovSolver2(iT num_iter = 8) : 
         _iter_cnt(num_iter),
         _min(0.0), _max(0.0), eqparams(Matrix()) {};
 
-    void fit(const Matrix &input);
-    
-    void solve(const Vector &y_true, Vector &solution);
+    void fit(const Matrix &input) override;
+    void solve(const Vector &y_true, Vector &x_pred) override;
 
 private:
     iT _iter_cnt;
