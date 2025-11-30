@@ -5,13 +5,13 @@
 
 class CholeskySolver {
 public:
-    CholeskySolver() {};
+  CholeskySolver() {};
 
-    void fit(const Matrix& mat);
-    void solve(const Vector& in_b, Vector& out_x);
+  void fit(const Matrix &mat);
+  void solve(const Vector &in_b, Vector &out_x);
 
 private:
-    Matrix L;
+  Matrix L;
 };
 
 #endif

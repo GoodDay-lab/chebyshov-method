@@ -3,7 +3,7 @@
 
 #include "matrix.hpp"
 
-void print(std::ostream&, const Vector&);
-void print(std::ostream&, const Matrix&);
+void print(std::ostream &, const Vector &);
+void print(std::ostream &, const Matrix &);
 
 #endif
