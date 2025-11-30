@@ -5,7 +5,7 @@
 #include <cstddef>
 
 // Для удобства реализации и проверки на разных типах float: f8, f16, f32, f64
-using dataType = long double;
+using dataType = double;
 
 // Так просто короче XD
 using iT = size_t;

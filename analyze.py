@@ -20,9 +20,37 @@ os.system("make rebuild")
 N_iters = [8, 16, 32, 64, 128, 256, 512]
 M_type = ["one-step", "two-step"]
 
+
+def plot_errors_with_min(iterations, errors_x, errors_b, label):
+    plt.figure(figsize=(10, 6))
+
+    min_x = min(errors_x)
+    min_b = min(errors_b)
+    min_x_iter = iterations[errors_x.index(min_x)]
+    min_b_iter = iterations[errors_b.index(min_b)]
+
+    plt.plot(iterations, errors_x, label=f'Ошибка по x (min: {min_x})', 
+             marker='o', markersize=4, color='blue')
+    plt.plot(iterations, errors_b, label=f'Ошибка по b (min: {min_b})', 
+             marker='s', markersize=4, color='red')
+
+    plt.scatter(min_x_iter, min_x, color='blue', s=100, zorder=5, 
+                edgecolors='black', linewidth=2, label=f'Min x (итер. {min_x_iter})')
+    plt.scatter(min_b_iter, min_b, color='red', s=100, zorder=5, 
+                edgecolors='black', linewidth=2, label=f'Min b (итер. {min_b_iter})')
+
+    plt.xlabel('Количество итераций')
+    plt.ylabel('Ошибка')
+    plt.title(f'Сходимость метода решения СЛАУ ({label})')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.show()
+
+
 for label in M_type:
 
-    errors = []
+    errors_x = []
+    errors_b = []
     print(f"Running {label} method")
     for n_iter in N_iters:
         process = subprocess.run([args.program, args.matrix, str(n_iter), label],
@@ -32,9 +60,10 @@ for label in M_type:
         f1 = np.array(results['x_orig']['data'])
         f2 = np.array(results['x_pred']['data'])
 
-        errors.append(np.sqrt(((f1 - f2)**2).sum()))
+        b1 = np.array(results['b_orig']['data'])
+        b2 = np.array(results['b_pred']['data'])
 
-    print(errors)
-    plt.title("Ошибка невязки")
-    plt.plot(list(range(len(errors))), errors)
-    plt.show()
+        errors_x.append(np.sqrt(((f1 - f2)**2).sum()))
+        errors_b.append(np.sqrt(((b1 - b2)**2).sum()))
+
+    plot_errors_with_min(list(range(len(errors_x))), errors_x, errors_b, label)
