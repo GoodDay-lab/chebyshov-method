@@ -10,7 +10,7 @@ class Solver {
 public:
   virtual ~Solver() = default;
   virtual void fit(const Matrix &input) = 0;
-  virtual void solve(const Vector &y_true, Vector &x_pred) = 0;
+  virtual void solve(const Vector &y_true, Vector &x_pred, std::vector<std::vector<dataType>> &history) = 0;
 };
 
 class ChebyshovSolver : public Solver {
@@ -19,7 +19,7 @@ public:
       : _iter_cnt(num_iter), _min(0.0), _max(0.0), eqparams(Matrix()) {};
 
   void fit(const Matrix &input) override;
-  void solve(const Vector &y_true, Vector &x_pred) override;
+  void solve(const Vector &y_true, Vector &x_pred, std::vector<std::vector<dataType>> &history) override;
 
 private:
   iT _iter_cnt;
@@ -35,7 +35,7 @@ public:
       : _iter_cnt(num_iter), _min(0.0), _max(0.0), eqparams(Matrix()) {};
 
   void fit(const Matrix &input) override;
-  void solve(const Vector &y_true, Vector &x_pred) override;
+  void solve(const Vector &y_true, Vector &x_pred, std::vector<std::vector<dataType>> &history) override;
 
 private:
   iT _iter_cnt;

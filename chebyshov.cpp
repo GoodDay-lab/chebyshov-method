@@ -70,7 +70,7 @@ void ChebyshovSolver::fit(const Matrix &input) {
   }
 }
 
-void ChebyshovSolver::solve(const Vector &y_true, Vector &solution) {
+void ChebyshovSolver::solve(const Vector &y_true, Vector &solution, std::vector<std::vector<dataType>> &history) {
   Vector buffer(solution.rowSize(), 0.0);
   for (iT i = 0; i < solution.rowSize(); ++i) {
     solution(i) = 0.0;
@@ -81,6 +81,7 @@ void ChebyshovSolver::solve(const Vector &y_true, Vector &solution) {
     for (iT j = 0; j < solution.rowSize(); ++j) {
       solution(j) =
           solution(j) + this->_iter_params[i] * (y_true(j) - buffer(j));
+      history[i][j] = solution(j);
     }
   }
 }
@@ -111,7 +112,7 @@ void ChebyshovSolver2::fit(const Matrix &input) {
   }
 }
 
-void ChebyshovSolver2::solve(const Vector &y_true, Vector &solution) {
+void ChebyshovSolver2::solve(const Vector &y_true, Vector &solution, std::vector<std::vector<dataType>> &history) {
   Vector buffer(solution.rowSize(), 0.0);
   Vector buffer2(solution.rowSize(), 0.0);
   Vector buffer3(solution.rowSize(), 0.0);
@@ -119,6 +120,10 @@ void ChebyshovSolver2::solve(const Vector &y_true, Vector &solution) {
   for (iT i = 0; i < solution.rowSize(); ++i) {
     buffer2(i) = 0.0;
     solution(i) = this->tau * y_true(i);
+  }
+
+  for (iT j = 0; j < solution.rowSize(); ++j) {
+    history[0][j] = solution(j);
   }
 
   for (iT i = 1; i < this->_iter_cnt; ++i) {
@@ -133,6 +138,7 @@ void ChebyshovSolver2::solve(const Vector &y_true, Vector &solution) {
     for (iT j = 0; j < solution.rowSize(); ++j) {
       buffer2(j) = solution(j);
       solution(j) = buffer3(j);
+      history[i][j] = solution(j);
     }
   }
 }

@@ -55,11 +55,13 @@ int main(int argc, char **argv) {
   }
   mulv(mat, x_orig, b_orig);
 
+  std::vector<std::vector<dataType>> history(num_iter, std::vector<dataType>(mat.colSize(), 0.0));
+
   // Засекаем время работы исключтельно только алгоритма
   // Вычисление множителя + Решение СЛАУ
   const auto start{std::chrono::high_resolution_clock::now()};
   solver->fit(mat);
-  solver->solve(b_orig, x_pred);
+  solver->solve(b_orig, x_pred, history);
   const auto finish{std::chrono::high_resolution_clock::now()};
   const auto duration = finish - start;
 
@@ -83,5 +85,22 @@ int main(int argc, char **argv) {
   std::cout << ",\n";
   std::cout << "\"x_pred\": \n";
   print(std::cout, x_pred);
+  std::cout << ",\n";
+  std::cout << "\"history\": \n";
+  std::cout << "[\n";
+
+  for (iT i = 0; i < num_iter; ++i) {
+    std::cout << "[";
+    for (iT j = 0; j < mat.colSize(); ++j) {
+      if (j + 1 == mat.colSize()) {
+        std::cout << history[i][j];
+      } else {
+        std::cout << history[i][j] << ", ";
+      }
+    }
+    std::cout << "]" << ((i + 1 == num_iter) ? ("\n") : (",\n"));
+  }
+  
+  std::cout << "]\n";
   std::cout << "}\n";
 }

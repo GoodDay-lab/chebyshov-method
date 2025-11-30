@@ -1,0 +1,231 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\onehalfspacing
+
+\title{Итерационный метод Чебышёва \\}
+\author{Васильев Павел Петрович \\ Группа 303}
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Постановка задачи}
+	
+	Необходимо решить СЛАУ явными одношаговым и двушаговым итерационным методом Чебышёва с оптимальными параметрами. 
+	
+	$$
+	x + \mathbf{A} x = \mathbf{b} \Leftrightarrow (\mathbf{I} + \mathbf{A}) x = \mathbf{b}
+	$$
+	где $\mathbf{I + A}$ -- симметричная строго определённая матрица.
+	
+	\section{Методы Чебышёва}
+	\subsection{Одношаговый итерационный алгоритм}
+	
+	Рассмотрим следующую итерационную схему
+	
+	$$
+	\frac{y_{k+1} - y_k}{\tau_{k+1}} + A y_k = b, \; y_0 \in \mathbf{H}
+	$$
+	$$
+	y_{k+1} = y_k + \tau_{k+1} (b - A y_k)
+	$$
+	где $\{ \tau_k \}$ -- итерационные параметры.
+	
+	Для решения этой задачи нам нужно задать набор итерационных параметров, что сводится
+	к нахождению полинома $P_n (t)$ такого вида, чтобы $\max | P_n (t) |$ на отрезке $[\gamma_1, \gamma_2]$ было минимальным. 
+	
+	Этот полином известен (Чебышёва) и имеет следующий вид:
+	
+	$$
+		P_n (t) = q_n T_n \left( \frac{1 - \tau_0 t}{\rho_0} \right), \;\; q_n = \frac{1}{T_n ( 1 / \rho_0)}
+	$$
+	где:
+	$$
+		T_n (t) = 
+		\begin{cases}
+			\cos (n \arccos (t)), \;\; |t| \le 1,\\
+			\ch (n \, \mathrm{Arch} (t)), \;\; |t| \ge 1 \\
+		\end{cases}
+	$$
+	
+	$$
+		q_n = \frac{2 p_1^n}{1 + p_1^{2n}}, \; \tau_0 = \frac{2}{\gamma_1 + \gamma_2}, \;
+		\rho_0 = \frac{1 - \xi}{1 + \xi}, \rho_1 = \frac{1 - \sqrt{\xi}}{1 + \sqrt{\xi}}, \; 
+		\xi = \frac{\gamma_1}{\gamma_2}
+	$$
+	
+	При этом $\max_{\{\gamma_1 \le t \le \gamma_2\}} | P_n (t) | = q_n$
+	
+	Пусть $\mathcal{M}_n$ -- множество корней полинома Чебышёва. А корни многочлена $P_n (t)$ равны $\frac{1}{\tau_k}$, тогда можно получить следующую формулу на итерационные параметры:
+	
+	$$
+		\tau_k = \frac{\tau_0}{1 + \rho_0 \mu_k}, \; \mu_k \in \mathcal{M}_n
+	$$
+	
+	\subsubsection{Поиск оптимальных параметров}
+	
+	Алгоритм может сходиться по-разному в зависимости даже от порядка параметров, будем использовать следующий алгоритм для построения оптимального набора.
+	
+	Пусть наше количество итераций равно степени двойки $n = 2^p$. Тогда:
+	
+	\begin{enumerate}
+		\item $\Theta_1 = \{1\}$
+		\item Увеличиваем количество элементов в $\Theta_k$ в двое, пока $k \ne 2^p$ по правилу:
+		\item $\theta_{2 i}^{2 m} = 4 m - \theta_i^m, \; \theta_{2 i - 1}^{2m} = \theta_i^m$, где
+		$\theta_{j}^{2m} \in \Theta_{2m}, \, \theta_{j}^{m} \in \Theta_{m}$
+		\item Продолжаем шаг 3, пока не выполнится условие 2
+	\end{enumerate}
+	
+	После получаем множество $\mathcal{M}_n^{*} = \{- \cos \frac{\pi}{2 n} \theta_i, \; \theta_i \in \Theta_n\}$
+	
+	Возвращаясь в предыдущей секции, это оптимальный порядок корней полинома Чебышёва и мы можем вычислять параметры $\tau_k$
+	
+	\subsection{Двушаговый итерационный алгоритм}
+	
+	Рассмотрим следующую итерационную схему:
+	
+	$$
+		y_{k+1} = \alpha_{k+1} (I - \tau_k A) y_k  + (1 - \alpha_{k+1}) y_{k-1} + \alpha_{k+1} \tau_k b
+	$$
+	
+	В этом случае параметры можно выбрать следующим образом:
+	
+	\begin{enumerate}
+		\item $\tau_k = \tau_0 = \frac{2}{\gamma_1 + \gamma_2}$
+		\item $\alpha_1 = 2, \; \alpha_{k+1} = \frac{4}{4 - \rho_0^2 \alpha_k}$,
+		где $\rho_0 = \frac{1 - \xi}{1 + \xi}, \; \xi = \frac{\gamma_2}{\gamma_1}$
+	\end{enumerate}
+	
+	В этом случае первое приближение вычисляется следующим образом: 
+	$$y_1 = y_0 + \tau (b - A y_0)$$
+	
+	\section{Оценка спектра матрицы}
+	
+	Параметры $\gamma_1$ и $\gamma_2$ являются константами эквивалентности для энергетических норм матрицу $A$ и $I$, поскольку матрица  $A$ -- симетричная, то $\gamma_1$ и $\gamma_2$ равны, соответственно, минимальному и максимальному собственному значению матрицы $A$.
+	
+	Чтобы оценить собственные значения мы можем воспользоваться теоремой Гершгорина, которая утверждает, что все собственные значения матрицы находятся в объединении кругов Гершгорина:
+	
+	$$
+		\forall i \in \mathcal{I}_n:\; |a_{ii} - \lambda| \le \sum_{k \ne i}^n | a_{ik} |
+	$$
+	
+	Матрица симметрична $\rightarrow$ её собственные значения находятся на вещественной прямой, найдём верхнюю границу этого объединения и нижнюю.
+	
+	В данном случае для матрицы  8 у нас выполнено, что $\gamma_1 \eqsim 1.0$, а $\gamma_2 \eqsim 154.4$
+	
+	\section{Графики}
+	
+	\subsection{Относительная погрешность}
+	
+	Относительная погрешность:
+	
+	$$
+		\epsilon_{relative} = \frac{|| y_{pred} - y_{true} ||}{|| y_{true} ||}
+	$$
+	$$
+		|| x || = \sqrt{\frac{1}{n} \sum_{i = 1}^{n} x_i^2}
+	$$
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_n512_one-step relative.png"}
+		\caption{График сходимости одношагового Чебышёвского метода. Ось Y имеет логарифмический масштаб. Ярко выражены осцилляции при приближении, но общий тренд имеет логарифмическую асимптотику.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_n512_two-step relative.png"}
+		\caption{График сходимости двушагового Чебышёвского метода. Ось Y имеет логарифмический масштаб. Уже нету таких больших осцилляций, общий тренд имеет логарифмическую асимптотику. Сходимость на 220 шаге.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{ccc}
+			\toprule
+			Итераций & Одношаговый алгоритм & Двушаговый алгоритм \\
+			\midrule
+			16 & 0.105 & 0.105 \\
+			32 & 0.008 & 0.009 \\
+			64 & 4.445e-5 & 4.251e-5 \\
+			128 & 1.559e-9 & 1.398e-9 \\
+			256 & 2.593e-16 & 4.329e-16 \\
+			512 & 2.749e-16 & 3.422e-16 \\
+			\bottomrule
+		\end{tabular}
+		\caption{Относительная погрешность в зависимости от итерации}
+		\label{tab:simple}
+	\end{table}
+
+	
+	\subsection{Абсолютная погрешность}
+	
+	Абсолютная погрешность:
+	
+	$$
+	\epsilon_{absolute} = || y_{pred} - y_{true} ||
+	$$
+	$$
+	|| x || = \sqrt{\frac{1}{n} \sum_{i = 1}^{n} x_i^2}
+	$$
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_n512_one-step.png"}
+		\caption{График сходимости одношагового Чебышёвского метода. Ось Y имеет логарифмический масштаб. Ярко выражены осцилляции при приближении, но общий тренд имеет логарифмическую асимптотику.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_n512_two-step.png"}
+		\caption{График сходимости двушагового Чебышёвского метода. Ось Y имеет логарифмический масштаб. Нету таких больших осцилляций, общий тренд имеет логарифмическую асимптотику. Сходимость на 210 шаге.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{ccc}
+			\toprule
+			Итераций & Одношаговый алгоритм & Двушаговый алгоритм \\
+			\midrule
+			16 & 4.054 & 4.75 \\
+			32 & 0.338 & 0.312 \\
+			64 & 0.001 & 0.001 \\
+			128 & 5.711e-8 & 5.686e-8 \\
+			256 & 9.072e-15 & 1.162e-14 \\
+			512 & 9.86e-15 & 1.886e-14 \\
+			\bottomrule
+		\end{tabular}
+		\caption{Абсолютная погрешность в зависимости от итерации}
+		\label{tab:simple}
+	\end{table}
+	
+	\section{Пояснения к коду}
+	
+	Основная логика находится в файлах: main.cpp, chebyshov.cpp, chebyshov.hpp
+	
+	\begin{itemize}
+		\item chebyshov.hpp - объявляет все необходимые классы для данной задачи.
+		\item chebyshov.cpp - реализованы алгоритмы оценки спектра и Чебышёвские итерации в классах Solver, метод fit оценивает матрицу и строит параметры, метод solve решает СЛАУ
+		\item main.cpp - чтение матрицы и вызов функций из файлов выше
+		\item Makefile - реализует сборку
+		\item analyze.py - скрипт который пересобирает код и строит графики
+	\end{itemize}
+	
+\end{document}

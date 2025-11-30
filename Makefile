@@ -3,6 +3,7 @@ CXX := clang++
 SRCDIR := .
 INCDIR := .
 BUILDDIR := build
+DOCDIR := docs
 TARGET := chebyshov
 
 SOURCES := $(wildcard $(SRCDIR)/*.cpp)
