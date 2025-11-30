@@ -8,6 +8,6 @@ $ python analyze.py ./chebyshov data/SLAU_var_1.csv
 
 ### Графики
 
-![Однопроходной алгоритм](Figure_1.png)
+![Однопроходной алгоритм](Figure_one-step.png)
 
-![Двупроходной алгоритм](Figure_2.png)
+![Двупроходной алгоритм](Figure_two-step.png)

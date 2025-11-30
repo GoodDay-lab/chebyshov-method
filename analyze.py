@@ -22,7 +22,7 @@ M_type = ["one-step", "two-step"]
 
 
 def plot_errors_with_min(iterations, errors_x, errors_b, label):
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(14, 6))
 
     min_x = min(errors_x)
     min_b = min(errors_b)
@@ -39,12 +39,13 @@ def plot_errors_with_min(iterations, errors_x, errors_b, label):
     plt.scatter(min_b_iter, min_b, color='red', s=100, zorder=5, 
                 edgecolors='black', linewidth=2, label=f'Min b (итер. {min_b_iter})')
 
+    plt.xticks(iterations, [str(i) for i in iterations])
     plt.xlabel('Количество итераций')
     plt.ylabel('Ошибка')
     plt.title(f'Сходимость метода решения СЛАУ ({label})')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.show()
+    plt.savefig(f"Figure_{label}.png")
 
 
 for label in M_type:
