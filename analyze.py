@@ -66,4 +66,4 @@ for label in M_type:
         errors_x.append(np.sqrt(((f1 - f2)**2).sum()))
         errors_b.append(np.sqrt(((b1 - b2)**2).sum()))
 
-    plot_errors_with_min(list(range(len(errors_x))), errors_x, errors_b, label)
+    plot_errors_with_min(N_iters, errors_x, errors_b, label)
