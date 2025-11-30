@@ -39,6 +39,7 @@ release: $(TARGET)
 
 clean:
 	rm -rf build $(TARGET) chebyshov_debug
+	find $(DOCDIR) -maxdepth 1 -type f ! -name "*.tex" -delete
 
 distclean: clean
 	rm -f *.txt *.dat *.out
