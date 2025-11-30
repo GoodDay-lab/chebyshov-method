@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <random>
+#include <iomanip>
 
 
 int main(int argc, char** argv) {
@@ -24,11 +25,13 @@ int main(int argc, char** argv) {
         mat.readFromFile(fileName);
     }
 
+    std::cout << std::setprecision(33);
+
     for (iT i = 0; i < mat.rowSize(); ++i) {
         mat(i, i) += 1.0;
     }
 
-    ChebyshovSolver solver(num_iter);
+    ChebyshovSolver2 solver(num_iter);
 
     std::random_device rd;
     std::mt19937 gen(rd());

@@ -32,6 +32,7 @@ for n_iter in N_iters:
     errors.append(np.sqrt(((f1 - f2)**2).sum()))
 
 
+print(errors)
 plt.title("Ошибка невязки")
 plt.plot(list(range(len(errors))), errors)
 plt.show()

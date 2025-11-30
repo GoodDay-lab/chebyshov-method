@@ -9,7 +9,7 @@
 
 class ChebyshovSolver {
 public:
-    ChebyshovSolver(iT num_iter) : 
+    ChebyshovSolver(iT num_iter = 8) : 
         _iter_cnt(num_iter),
         _min(0.0), _max(0.0), eqparams(Matrix()) {};
 
@@ -19,6 +19,25 @@ public:
 
 private:
     iT _iter_cnt;
+    std::vector<dataType> _iter_params;
+    dataType _min, _max;
+
+    Matrix eqparams;
+};
+
+class ChebyshovSolver2 {
+public:
+    ChebyshovSolver2(iT num_iter = 8) : 
+        _iter_cnt(num_iter),
+        _min(0.0), _max(0.0), eqparams(Matrix()) {};
+
+    void fit(const Matrix &input);
+    
+    void solve(const Vector &y_true, Vector &solution);
+
+private:
+    iT _iter_cnt;
+    dataType tau;
     std::vector<dataType> _iter_params;
     dataType _min, _max;
 
