@@ -70,7 +70,7 @@ def plot_errors_with_min2(iterations, errors_x, label):
 
 
 A = pd.read_csv(args.matrix, header=None).values
-N = A.shape[0]
+N = 1
 
 
 for label in M_type:
@@ -102,8 +102,11 @@ for label in M_type:
         relative_errors_x.append(errors_x[-1] / np.sqrt((f1**2).sum() / N))
         relative_errors_b.append(errors_b[-1] / np.sqrt(((A @ f1)**2).sum() / N))
 
+    print(errors_x)
+    print(relative_errors_x)
     print(errors_b)
     print(relative_errors_b)
     plot_errors_with_min(N_iters, errors_x, errors_b, label)
+    plot_errors_with_min(N_iters, relative_errors_x, relative_errors_b, label + " relative")
     plot_errors_with_min2(list(range(len(total_errors_y))), total_errors_y, label)
     plot_errors_with_min2(list(range(len(total_relative_errors_y))), total_relative_errors_y, label + " relative")

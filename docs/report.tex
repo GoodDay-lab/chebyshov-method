@@ -175,7 +175,6 @@
 		\caption{Относительная погрешность в зависимости от итерации}
 		\label{tab:simple}
 	\end{table}
-
 	
 	\subsection{Абсолютная погрешность}
 	
@@ -219,6 +218,42 @@
 		\caption{Абсолютная погрешность в зависимости от итерации}
 		\label{tab:simple}
 	\end{table}
+	
+	\subsection{Относительная погрешность в зависимости от числа операций}
+	
+		При построении одношаговым методом и при подборе параметров они зависят от количества итераций, которые мы хотим провести, поэтому имеет смысл привести следующие графики. Графики в относительной среднеквадратичной норме.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_one-step relative.png"}
+		\caption{График сходимости одношагового Чебышёвского метода. Ось Y имеет логарифмический масштаб. Функция не линейна.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_two-step relative.png"}
+		\caption{График сходимости двушагового Чебышёвского метода. Ось Y имеет логарифмический масштаб. Функция нелинейна.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\subsection{Абсолютная погрешность решений}
+	
+	Здесь представлены ошибки решений в среднеквадратичной норме.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_one-step.png"}
+		\caption{График сходимости одношагового Чебышёвского метода. Ось Y имеет логарифмический масштаб.}
+		\label{fig:convergence}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=16cm,height=7cm]{"../Figure_two-step.png"}
+		\caption{График сходимости двушагового Чебышёвского метода. Ось Y имеет логарифмический масштаб.}
+		\label{fig:convergence}
+	\end{figure}
 	
 	\section{Пояснения к коду}
 
